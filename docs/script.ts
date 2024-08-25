@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   button?.addEventListener("click", () => {
     textBalloons([
       {
-        text: "BALLOONS",
+        text: "🏝️💩🤡🤩",
         color: "rgba(255, 0, 0, 0.85)",
         fontSize: "162px",
       },

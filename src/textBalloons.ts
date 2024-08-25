@@ -19,7 +19,8 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    overflow: "hidden",
+    // TODO: avoid clipping emojis
+    // overflow: "hidden",
     textAlign: "center",
     transform: "translateZ(0)",
     filter: "url(#balloon)",
@@ -30,6 +31,8 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     transformOrigin: "center",
     contain: "style, layout, paint",
     minWidth: "1ch",
+    verticalAlign: "middle",
+    // TODO: use radial gradient and background clip: text;. This breaks in Firefox so find a fix
   });
 
   return balloon;
@@ -124,7 +127,10 @@ export function textBalloons(balloons: BalloonData[]): void {
   const maxDepth = 1000; // Maximum Z depth
 
   balloons.forEach((line, lineIndex) => {
-    const chars = line.text.split("");
+    // Using segmenter to support emojis
+    const chars = Array.from(new Intl.Segmenter().segment(line.text)).map(
+      (segment) => segment.segment
+    );
     // const zPosition = ((totalLines - lineIndex + 1) / totalLines) * maxDepth;
     const zPosition = 0;
 

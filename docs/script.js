@@ -36,7 +36,8 @@
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            overflow: "hidden",
+            // TODO: avoid clipping emojis
+            // overflow: "hidden",
             textAlign: "center",
             transform: "translateZ(0)",
             filter: "url(#balloon)",
@@ -46,6 +47,8 @@
             transformOrigin: "center",
             contain: "style, layout, paint",
             minWidth: "1ch",
+            verticalAlign: "middle",
+            // TODO: use radial gradient and background clip: text;. This breaks in Firefox so find a fix
         });
         return balloon;
     }
@@ -97,7 +100,8 @@
         var charSpacing = 0.2; // Additional spacing between characters in ch units
         balloons.length;
         balloons.forEach(function (line, lineIndex) {
-            var chars = line.text.split("");
+            // Using segmenter to support emojis
+            var chars = Array.from(new Intl.Segmenter().segment(line.text)).map(function (segment) { return segment.segment; });
             // const zPosition = ((totalLines - lineIndex + 1) / totalLines) * maxDepth;
             var zPosition = 0;
             var lineBalloons = chars.map(function (char) {
@@ -155,7 +159,7 @@
         button === null || button === void 0 ? void 0 : button.addEventListener("click", function () {
             textBalloons([
                 {
-                    text: "BALLOONS",
+                    text: "🏝️💩🤡🤩",
                     color: "rgba(255, 0, 0, 0.85)",
                     fontSize: "162px",
                 },

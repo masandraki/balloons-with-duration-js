@@ -3,6 +3,7 @@ import {
   createBallonElement,
   svgFiltersHtml,
 } from "./balloonSvg";
+export { textBalloons } from "./textBalloons";
 
 const easings = [
   // easeOutQuint

@@ -4,9 +4,24 @@ document.addEventListener("DOMContentLoaded", () => {
   //   balloons();
   textBalloons([
     {
-      text: "Hello",
-      color: "#FF0000",
-      fontSize: "122px",
+      text: "BALLOONS",
+      color: "rgba(255, 0, 0, 0.85)",
+      fontSize: "162px",
+    },
+    {
+      text: "ARE NOW",
+      color: "rgba(40, 40, 255, 0.85)",
+      fontSize: "162px",
+    },
+    {
+      text: "LIVE !! $#",
+      color: "rgba(0, 200, 0, 0.85)",
+      fontSize: "162px",
+    },
+    {
+      text: "function() {}",
+      color: "rgba(240, 220, 0, 0.85)",
+      fontSize: "162px",
     },
   ]);
   const button = document.getElementById("releastBalloonsButton");

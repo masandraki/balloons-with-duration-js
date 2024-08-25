@@ -13,7 +13,7 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     color: data.color,
     bottom: "0",
     opacity: "0",
-    transition: "opacity 0.5s ease-in-out, transform 1s ease-out",
+
     fontSize: data.fontSize,
     lineHeight: "1",
     display: "flex",
@@ -22,6 +22,9 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     overflow: "hidden",
     textAlign: "center",
     transform: "translateY(0)",
+    filter: "url(#balloon)",
+    // To handle empty spaces
+    minWidth: "1ch",
   });
 
   return balloon;
@@ -30,11 +33,11 @@ function createTextBalloon(data: BalloonData): HTMLElement {
 function animateBalloon(balloon: HTMLElement) {
   const duration = 10000 + Math.random() * 5000;
   const keyframes = [
-    { transform: "translate(0, 0)", opacity: 0 },
+    { transform: "translate(0, 0)", opacity: 1 },
     { opacity: 1, offset: 0.1 },
     {
       transform: `translate(${(Math.random() - 0.5) * 50}px, -100vh)`,
-      opacity: 0,
+      opacity: 1,
     },
   ];
 
@@ -49,6 +52,35 @@ function animateBalloon(balloon: HTMLElement) {
 
 export function textBalloons(balloons: BalloonData[]): void {
   const container = document.createElement("text-balloons");
+  const textBalloonsFilter = document.createElement("text-balloons-filter");
+  textBalloonsFilter.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+
+  <filter id="balloon" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+
+    <feSpecularLighting in="blur" surfaceScale="42" specularConstant="0.95" specularExponent="60" lighting-color="#ffffff" result="highlight">
+      <feDistantLight azimuth="300" elevation="22" />
+    </feSpecularLighting>
+
+    <feComposite in2="SourceGraphic" in="highlight" operator="atop" result="with-light" />
+
+    <feColorMatrix in="SourceAlpha" type="matrix" values="1 0 0 0 0
+              0 1 0 0 0
+              0 0 1 0 0
+              0 0 0 100 0" result="black" />
+    <feOffset in="black" dx="-6" dy="6" result="offset" />
+
+    <feComposite in2="black" in="offset" operator="out" result="clipped" />
+    <feGaussianBlur in="clipped" stdDeviation="6" result="clipped-blur" />
+    <feOffset in="clipped-blur" dx="6" dy="-6" result="offset-shadow" />
+    <feComposite in="offset-shadow" in2="with-light" operator="atop" result="swa" />
+
+  </filter>
+</svg>
+`;
+  container.appendChild(textBalloonsFilter);
+  container.style.filter = "drop-shadow(-9px 10px 10px rgba(0, 0, 0, 0.5))";
 
   Object.assign(container.style, {
     position: "fixed",

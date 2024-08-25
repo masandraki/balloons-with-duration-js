@@ -29,7 +29,7 @@
         Object.assign(balloon.style, {
             position: "absolute",
             color: data.color,
-            bottom: "0",
+            top: "100%",
             opacity: "0",
             fontSize: data.fontSize,
             lineHeight: "1",
@@ -41,22 +41,26 @@
             transform: "translateY(0)",
             filter: "url(#balloon)",
             // To handle empty spaces
+            backfaceVisibility: "hidden",
+            transformStyle: "preserve-3d",
+            transformOrigin: "center",
             minWidth: "1ch",
         });
         return balloon;
     }
-    function animateBalloon(balloon) {
+    function animateBalloon(balloon, zPosition, delay) {
         var duration = 10000 + Math.random() * 5000;
         var keyframes = [
-            { transform: "translate(0, 0)", opacity: 1 },
+            { transform: "translate3d(0, 0, ".concat(-zPosition, "px)"), opacity: 1 },
             { opacity: 1, offset: 0.1 },
             {
-                transform: "translate(".concat((Math.random() - 0.5) * 50, "px, -100vh)"),
+                transform: "translate3d(".concat((Math.random() - 0.5) * 50, "px, -100vh, ").concat(-zPosition, "px)"),
                 opacity: 1,
             },
         ];
         var animation = balloon.animate(keyframes, {
             duration: duration,
+            delay: delay,
             easing: "ease-in-out",
             fill: "forwards",
         });
@@ -76,42 +80,42 @@
             height: "100%",
             pointerEvents: "none",
             zIndex: "9999",
+            perspective: "1000px",
+            perspectiveOrigin: "50% 100%",
         });
         document.body.appendChild(container);
-        var lineDelay = 1000; // Delay between lines in milliseconds
+        var lineDelay = 3000; // Delay between lines in milliseconds
         var charDelay = 100; // Delay between characters in milliseconds
         var charSpacing = 0.2; // Additional spacing between characters in ch units
+        balloons.length;
         balloons.forEach(function (line, lineIndex) {
-            setTimeout(function () {
-                var chars = line.text.split("");
-                // Create all balloons for the line and add them to the container
-                var lineBalloons = chars.map(function (char) {
-                    var balloon = createTextBalloon({
-                        text: char,
-                        color: line.color,
-                        fontSize: line.fontSize,
-                    });
-                    balloon.style.opacity = "0"; // Hide the balloon initially
-                    container.appendChild(balloon);
-                    return balloon;
+            var chars = line.text.split("");
+            // const zPosition = ((totalLines - lineIndex + 1) / totalLines) * maxDepth;
+            var zPosition = 0;
+            var lineBalloons = chars.map(function (char) {
+                var balloon = createTextBalloon({
+                    text: char,
+                    color: line.color,
+                    fontSize: line.fontSize,
                 });
-                // Force a reflow to ensure offsetWidth is calculated
-                container.offsetHeight;
-                // Calculate total line width
-                var lineWidthPx = lineBalloons.reduce(function (sum, balloon) { return sum + balloon.offsetWidth; }, 0);
-                var containerWidth = container.offsetWidth;
-                var lineWidthPercent = (lineWidthPx / containerWidth) * 100;
-                var startX = Math.max(0, Math.min(100 - lineWidthPercent, 50 - lineWidthPercent / 2));
-                var currentX = startX;
-                lineBalloons.forEach(function (balloon, charIndex) {
-                    setTimeout(function () {
-                        var charWidthPercent = (balloon.offsetWidth / containerWidth) * 100;
-                        balloon.style.left = "".concat(currentX, "%");
-                        animateBalloon(balloon);
-                        currentX += charWidthPercent + charSpacing;
-                    }, charIndex * charDelay);
-                });
-            }, lineIndex * lineDelay);
+                balloon.style.opacity = "0";
+                container.appendChild(balloon);
+                return balloon;
+            });
+            // Force a reflow
+            container.offsetHeight;
+            // Calculate total line width
+            var lineWidthPx = lineBalloons.reduce(function (sum, balloon) { return sum + balloon.offsetWidth; }, 0);
+            var containerWidth = container.offsetWidth;
+            var lineWidthPercent = (lineWidthPx / containerWidth) * 100;
+            var startX = Math.max(0, Math.min(100 - lineWidthPercent, 50 - lineWidthPercent / 2));
+            var currentX = startX;
+            lineBalloons.forEach(function (balloon, charIndex) {
+                var charWidthPercent = (balloon.offsetWidth / containerWidth) * 100;
+                balloon.style.left = "".concat(currentX, "%");
+                animateBalloon(balloon, zPosition, lineIndex * lineDelay + charIndex * charDelay);
+                currentX += charWidthPercent + charSpacing;
+            });
         });
     }
 
@@ -128,16 +132,16 @@
                 color: "rgba(40, 40, 255, 0.85)",
                 fontSize: "162px",
             },
-            {
-                text: "LIVE !! $#",
-                color: "rgba(0, 200, 0, 0.85)",
-                fontSize: "162px",
-            },
-            {
-                text: "function() {}",
-                color: "rgba(240, 220, 0, 0.85)",
-                fontSize: "162px",
-            },
+            // {
+            //   text: "LIVE !! $#",
+            //   color: "rgba(0, 200, 0, 0.85)",
+            //   fontSize: "162px",
+            // },
+            // {
+            //   text: "function() {}",
+            //   color: "rgba(240, 220, 0, 0.85)",
+            //   fontSize: "162px",
+            // },
         ]);
         var button = document.getElementById("releastBalloonsButton");
         button === null || button === void 0 ? void 0 : button.addEventListener("click", function () {

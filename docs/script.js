@@ -31,13 +31,15 @@
             color: data.color,
             bottom: "0",
             opacity: "0",
+            transition: "opacity 0.5s ease-in-out, transform 1s ease-out",
             fontSize: data.fontSize,
-            lineHeight: "1cap",
-            width: "1cap",
+            lineHeight: "1",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            overflow: "hidden",
             textAlign: "center",
+            transform: "translateY(0)",
         });
         return balloon;
     }
@@ -72,22 +74,35 @@
         document.body.appendChild(container);
         var lineDelay = 1000; // Delay between lines in milliseconds
         var charDelay = 100; // Delay between characters in milliseconds
+        var charSpacing = 0.2; // Additional spacing between characters in ch units
         balloons.forEach(function (line, lineIndex) {
             setTimeout(function () {
                 var chars = line.text.split("");
-                var lineWidth = chars.length * 1.2; // Approximate width in ch units
-                var startX = Math.max(0, Math.min(100 - lineWidth, 50 - lineWidth / 2));
-                chars.forEach(function (char, charIndex) {
+                // Create all balloons for the line and add them to the container
+                var lineBalloons = chars.map(function (char) {
+                    var balloon = createTextBalloon({
+                        text: char,
+                        color: line.color,
+                        fontSize: line.fontSize,
+                    });
+                    balloon.style.opacity = "0"; // Hide the balloon initially
+                    container.appendChild(balloon);
+                    return balloon;
+                });
+                // Force a reflow to ensure offsetWidth is calculated
+                container.offsetHeight;
+                // Calculate total line width
+                var lineWidthPx = lineBalloons.reduce(function (sum, balloon) { return sum + balloon.offsetWidth; }, 0);
+                var containerWidth = container.offsetWidth;
+                var lineWidthPercent = (lineWidthPx / containerWidth) * 100;
+                var startX = Math.max(0, Math.min(100 - lineWidthPercent, 50 - lineWidthPercent / 2));
+                var currentX = startX;
+                lineBalloons.forEach(function (balloon, charIndex) {
                     setTimeout(function () {
-                        var x = startX + charIndex * 1.2; // 1.2ch spacing between characters
-                        var balloon = createTextBalloon({
-                            text: char,
-                            color: line.color,
-                            fontSize: line.fontSize,
-                        });
-                        balloon.style.left = "".concat(x, "%");
-                        container.appendChild(balloon);
+                        var charWidthPercent = (balloon.offsetWidth / containerWidth) * 100;
+                        balloon.style.left = "".concat(currentX, "%");
                         animateBalloon(balloon);
+                        currentX += charWidthPercent + charSpacing;
                     }, charIndex * charDelay);
                 });
             }, lineIndex * lineDelay);

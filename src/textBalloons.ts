@@ -10,17 +10,18 @@ function createTextBalloon(data: BalloonData): HTMLElement {
 
   Object.assign(balloon.style, {
     position: "absolute",
-
     color: data.color,
     bottom: "0",
     opacity: "0",
+    transition: "opacity 0.5s ease-in-out, transform 1s ease-out",
     fontSize: data.fontSize,
-    lineHeight: "1cap",
-    width: "1cap",
+    lineHeight: "1",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    overflow: "hidden",
     textAlign: "center",
+    transform: "translateY(0)",
   });
 
   return balloon;
@@ -63,24 +64,50 @@ export function textBalloons(balloons: BalloonData[]): void {
 
   const lineDelay = 1000; // Delay between lines in milliseconds
   const charDelay = 100; // Delay between characters in milliseconds
+  const charSpacing = 0.2; // Additional spacing between characters in ch units
 
   balloons.forEach((line, lineIndex) => {
     setTimeout(() => {
       const chars = line.text.split("");
-      const lineWidth = chars.length * 1.2; // Approximate width in ch units
-      const startX = Math.max(0, Math.min(100 - lineWidth, 50 - lineWidth / 2));
 
-      chars.forEach((char, charIndex) => {
+      // Create all balloons for the line and add them to the container
+      const lineBalloons = chars.map((char) => {
+        const balloon = createTextBalloon({
+          text: char,
+          color: line.color,
+          fontSize: line.fontSize,
+        });
+        balloon.style.opacity = "0"; // Hide the balloon initially
+        container.appendChild(balloon);
+        return balloon;
+      });
+
+      // Force a reflow to ensure offsetWidth is calculated
+      container.offsetHeight;
+
+      // Calculate total line width
+      const lineWidthPx = lineBalloons.reduce(
+        (sum, balloon) => sum + balloon.offsetWidth,
+        0
+      );
+      const containerWidth = container.offsetWidth;
+      const lineWidthPercent = (lineWidthPx / containerWidth) * 100;
+
+      const startX = Math.max(
+        0,
+        Math.min(100 - lineWidthPercent, 50 - lineWidthPercent / 2)
+      );
+
+      let currentX = startX;
+
+      lineBalloons.forEach((balloon, charIndex) => {
         setTimeout(() => {
-          const x = startX + charIndex * 1.2; // 1.2ch spacing between characters
-          const balloon = createTextBalloon({
-            text: char,
-            color: line.color,
-            fontSize: line.fontSize,
-          });
-          balloon.style.left = `${x}%`;
-          container.appendChild(balloon);
+          const charWidthPercent = (balloon.offsetWidth / containerWidth) * 100;
+
+          balloon.style.left = `${currentX}%`;
           animateBalloon(balloon);
+
+          currentX += charWidthPercent + charSpacing;
         }, charIndex * charDelay);
       });
     }, lineIndex * lineDelay);

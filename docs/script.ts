@@ -27,6 +27,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const button = document.getElementById("releastBalloonsButton");
 
   button?.addEventListener("click", () => {
-    // balloons();
+    textBalloons([
+      {
+        text: "BALLOONS",
+        color: "rgba(255, 0, 0, 0.85)",
+        fontSize: "162px",
+      },
+      {
+        text: "ARE NOW",
+        color: "rgba(40, 40, 255, 0.85)",
+        fontSize: "162px",
+      },
+      // {
+      //   text: "LIVE !! $#",
+      //   color: "rgba(0, 200, 0, 0.85)",
+      //   fontSize: "162px",
+      // },
+      // {
+      //   text: "function() {}",
+      //   color: "rgba(240, 220, 0, 0.85)",
+      //   fontSize: "162px",
+      // },
+    ]);
   });
 });

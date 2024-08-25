@@ -21,14 +21,14 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     justifyContent: "center",
     overflow: "hidden",
     textAlign: "center",
-    transform: "translateY(0)",
+    transform: "translateZ(0)",
     filter: "url(#balloon)",
     // To handle empty spaces
     backfaceVisibility: "hidden",
     transformStyle: "preserve-3d",
 
     transformOrigin: "center",
-
+    contain: "style, layout, paint",
     minWidth: "1ch",
   });
 
@@ -41,21 +41,30 @@ function animateBalloon(
   delay: number
 ) {
   const duration = 10000 + Math.random() * 5000;
-  const keyframes = [
-    { transform: `translate3d(0, 0, ${-zPosition}px)`, opacity: 1 },
-    { opacity: 1, offset: 0.1 },
-    {
-      transform: `translate3d(${
-        (Math.random() - 0.5) * 50
-      }px, -100vh, ${-zPosition}px)`,
-      opacity: 1,
-    },
-  ];
+  const tiltYAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -10 and 10 degrees
+  const tiltZAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -20 and 20 degrees
+  const tiltFrequency = 1 + Math.random(); // Random frequency between 1 and 2
+  const targetX = (Math.random() - 0.5) * 100; // Random target X position between -50 and 50
+
+  const keyframes = new Array(101).fill(null).map((_, i) => {
+    const progress = i / 100;
+    const verticalProgress = -100 * progress;
+    const horizontalProgress = targetX * progress;
+    const tiltY =
+      Math.sin(progress * Math.PI * 2 * tiltFrequency) * tiltYAmplitude;
+    const tiltZ =
+      Math.cos(progress * Math.PI * 2 * tiltFrequency) * tiltZAmplitude;
+
+    return {
+      transform: `translate3d(${horizontalProgress}px, ${verticalProgress}vh, ${-zPosition}px) rotateY(${tiltY}deg) rotateZ(${tiltZ}deg)`,
+      opacity: i === 0 ? 0 : 1,
+    };
+  });
 
   const animation = balloon.animate(keyframes, {
     duration,
     delay,
-    easing: "ease-in-out",
+    easing: "linear",
     fill: "forwards",
   });
 

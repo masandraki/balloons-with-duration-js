@@ -38,30 +38,38 @@
             justifyContent: "center",
             overflow: "hidden",
             textAlign: "center",
-            transform: "translateY(0)",
+            transform: "translateZ(0)",
             filter: "url(#balloon)",
             // To handle empty spaces
             backfaceVisibility: "hidden",
             transformStyle: "preserve-3d",
             transformOrigin: "center",
+            contain: "style, layout, paint",
             minWidth: "1ch",
         });
         return balloon;
     }
     function animateBalloon(balloon, zPosition, delay) {
         var duration = 10000 + Math.random() * 5000;
-        var keyframes = [
-            { transform: "translate3d(0, 0, ".concat(-zPosition, "px)"), opacity: 1 },
-            { opacity: 1, offset: 0.1 },
-            {
-                transform: "translate3d(".concat((Math.random() - 0.5) * 50, "px, -100vh, ").concat(-zPosition, "px)"),
-                opacity: 1,
-            },
-        ];
+        var tiltYAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -10 and 10 degrees
+        var tiltZAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -20 and 20 degrees
+        var tiltFrequency = 1 + Math.random(); // Random frequency between 1 and 2
+        var targetX = (Math.random() - 0.5) * 100; // Random target X position between -50 and 50
+        var keyframes = new Array(101).fill(null).map(function (_, i) {
+            var progress = i / 100;
+            var verticalProgress = -100 * progress;
+            var horizontalProgress = targetX * progress;
+            var tiltY = Math.sin(progress * Math.PI * 2 * tiltFrequency) * tiltYAmplitude;
+            var tiltZ = Math.cos(progress * Math.PI * 2 * tiltFrequency) * tiltZAmplitude;
+            return {
+                transform: "translate3d(".concat(horizontalProgress, "px, ").concat(verticalProgress, "vh, ").concat(-zPosition, "px) rotateY(").concat(tiltY, "deg) rotateZ(").concat(tiltZ, "deg)"),
+                opacity: i === 0 ? 0 : 1,
+            };
+        });
         var animation = balloon.animate(keyframes, {
             duration: duration,
             delay: delay,
-            easing: "ease-in-out",
+            easing: "linear",
             fill: "forwards",
         });
         animation.onfinish = function () { return balloon.remove(); };
@@ -145,7 +153,28 @@
         ]);
         var button = document.getElementById("releastBalloonsButton");
         button === null || button === void 0 ? void 0 : button.addEventListener("click", function () {
-            // balloons();
+            textBalloons([
+                {
+                    text: "BALLOONS",
+                    color: "rgba(255, 0, 0, 0.85)",
+                    fontSize: "162px",
+                },
+                {
+                    text: "ARE NOW",
+                    color: "rgba(40, 40, 255, 0.85)",
+                    fontSize: "162px",
+                },
+                // {
+                //   text: "LIVE !! $#",
+                //   color: "rgba(0, 200, 0, 0.85)",
+                //   fontSize: "162px",
+                // },
+                // {
+                //   text: "function() {}",
+                //   color: "rgba(240, 220, 0, 0.85)",
+                //   fontSize: "162px",
+                // },
+            ]);
         });
     });
 

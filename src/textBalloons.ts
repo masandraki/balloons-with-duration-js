@@ -1,3 +1,5 @@
+import { fontDefinition } from "./balloonFont";
+
 interface BalloonData {
   text: string;
   color: string;
@@ -24,12 +26,12 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     textAlign: "center",
     transform: "translateZ(0)",
     filter: "url(#balloon)",
-    // To handle empty spaces
     backfaceVisibility: "hidden",
     transformStyle: "preserve-3d",
 
     transformOrigin: "center",
     contain: "style, layout, paint",
+    // To handle empty spaces
     minWidth: "1ch",
     verticalAlign: "middle",
     // TODO: use radial gradient and background clip: text;. This breaks in Firefox so find a fix
@@ -81,6 +83,17 @@ export function textBalloons(balloons: BalloonData[]): void {
   <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
 
   <filter id="balloon" color-interpolation-filters="sRGB">
+    <feMorphology in="SourceGraphic" operator="dilate" radius="3" result="dilated" />
+
+    <feGaussianBlur in="dilated" stdDeviation="1" result="dilated-blur" />
+
+    <feSpecularLighting in="dilated-blur" surfaceScale="10" specularConstant="3.05" specularExponent="20" lighting-color="#ffffff" result="outline-highlight">
+      <feDistantLight azimuth="120" elevation="12" />
+    </feSpecularLighting>
+
+     <feComposite in2="dilated" in="outline-highlight" operator="atop" result="outline-with-light" />
+    
+
     <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
 
     <feSpecularLighting in="blur" surfaceScale="42" specularConstant="0.95" specularExponent="60" lighting-color="#ffffff" result="highlight">
@@ -100,11 +113,17 @@ export function textBalloons(balloons: BalloonData[]): void {
     <feOffset in="clipped-blur" dx="6" dy="-6" result="offset-shadow" />
     <feComposite in="offset-shadow" in2="with-light" operator="atop" result="swa" />
 
+    <feComposite in="outline-with-light" in2="SourceGraphic" operator="out" result="outline"/>
+    <feComposite in2="outline" in="swa" operator="over"  />
+
   </filter>
 </svg>
 `;
+
   container.appendChild(textBalloonsFilter);
-  container.style.filter = "drop-shadow(-60px 60px 12px rgba(0, 0, 0, 0.25))";
+  const textBalloonsStyle = document.createElement("style");
+  textBalloonsStyle.innerHTML = fontDefinition;
+  container.appendChild(textBalloonsStyle);
 
   Object.assign(container.style, {
     position: "fixed",
@@ -112,10 +131,17 @@ export function textBalloons(balloons: BalloonData[]): void {
     left: "0",
     width: "100%",
     height: "100%",
-    pointerEvents: "none",
     zIndex: "9999",
+    pointerEvents: "none",
     perspective: "1000px",
     perspectiveOrigin: "50% 100%",
+
+    // Shadows
+    filter: "drop-shadow(-60px 60px 12px rgba(0, 0, 0, 0.25))",
+
+    // Custom balloon font
+    fontFamily: `"BalloonsJS", system-ui`,
+    fontWeight: "bold",
   });
 
   document.body.appendChild(container);

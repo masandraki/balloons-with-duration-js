@@ -44,7 +44,7 @@ function animateBalloon(
   delay: number
 ) {
   const duration = 10000 + Math.random() * 5000;
-  const tiltYAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -10 and 10 degrees
+  const tiltYAmplitude = (Math.random() - 0.5) * 18; // Random tilt amplitude between -10 and 10 degrees
   const tiltZAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -20 and 20 degrees
   const tiltFrequency = 1 + Math.random(); // Random frequency between 1 and 2
   const targetX = (Math.random() - 0.5) * 100; // Random target X position between -50 and 50
@@ -104,7 +104,7 @@ export function textBalloons(balloons: BalloonData[]): void {
 </svg>
 `;
   container.appendChild(textBalloonsFilter);
-  container.style.filter = "drop-shadow(-9px 10px 10px rgba(0, 0, 0, 0.5))";
+  container.style.filter = "drop-shadow(-60px 60px 12px rgba(0, 0, 0, 0.25))";
 
   Object.assign(container.style, {
     position: "fixed",

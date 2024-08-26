@@ -9,15 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
       fontSize: "162px",
     },
     {
-      text: "ARE NOW",
+      text: "ARE JUST",
       color: "rgba(40, 40, 255, 0.85)",
       fontSize: "162px",
     },
-    // {
-    //   text: "LIVE !! $#",
-    //   color: "rgba(0, 200, 0, 0.85)",
-    //   fontSize: "162px",
-    // },
+    {
+      text: "SO CUTE",
+      color: "rgba(0, 200, 0, 0.85)",
+      fontSize: "162px",
+    },
+    {
+      text: "👻 💩 🤙",
+      color: "BLACK",
+      fontSize: "182px",
+    },
     // {
     //   text: "function() {}",
     //   color: "rgba(240, 220, 0, 0.85)",

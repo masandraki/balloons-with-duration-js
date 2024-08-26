@@ -54,7 +54,7 @@
     }
     function animateBalloon(balloon, zPosition, delay) {
         var duration = 10000 + Math.random() * 5000;
-        var tiltYAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -10 and 10 degrees
+        var tiltYAmplitude = (Math.random() - 0.5) * 18; // Random tilt amplitude between -10 and 10 degrees
         var tiltZAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -20 and 20 degrees
         var tiltFrequency = 1 + Math.random(); // Random frequency between 1 and 2
         var targetX = (Math.random() - 0.5) * 100; // Random target X position between -50 and 50
@@ -82,7 +82,7 @@
         var textBalloonsFilter = document.createElement("text-balloons-filter");
         textBalloonsFilter.innerHTML = "\n  <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0\" height=\"0\">\n\n  <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"42\" specularConstant=\"0.95\" specularExponent=\"60\" lighting-color=\"#ffffff\" result=\"highlight\">\n      <feDistantLight azimuth=\"300\" elevation=\"22\" />\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n  </filter>\n</svg>\n";
         container.appendChild(textBalloonsFilter);
-        container.style.filter = "drop-shadow(-9px 10px 10px rgba(0, 0, 0, 0.5))";
+        container.style.filter = "drop-shadow(-60px 60px 12px rgba(0, 0, 0, 0.25))";
         Object.assign(container.style, {
             position: "fixed",
             bottom: "0",
@@ -140,15 +140,20 @@
                 fontSize: "162px",
             },
             {
-                text: "ARE NOW",
+                text: "ARE JUST",
                 color: "rgba(40, 40, 255, 0.85)",
                 fontSize: "162px",
             },
-            // {
-            //   text: "LIVE !! $#",
-            //   color: "rgba(0, 200, 0, 0.85)",
-            //   fontSize: "162px",
-            // },
+            {
+                text: "SO CUTE",
+                color: "rgba(0, 200, 0, 0.85)",
+                fontSize: "162px",
+            },
+            {
+                text: "👻 💩 🤙",
+                color: "BLACK",
+                fontSize: "182px",
+            },
             // {
             //   text: "function() {}",
             //   color: "rgba(240, 220, 0, 0.85)",

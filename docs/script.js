@@ -1,3 +1,5 @@
+
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 (function () {
     'use strict';
 
@@ -61,12 +63,11 @@
         var targetX = (Math.random() - 0.5) * 100; // Random target X position between -50 and 50
         var keyframes = new Array(101).fill(null).map(function (_, i) {
             var progress = i / 100;
-            var verticalProgress = -100 * progress;
             var horizontalProgress = targetX * progress;
             var tiltY = Math.sin(progress * Math.PI * 2 * tiltFrequency) * tiltYAmplitude;
             var tiltZ = Math.cos(progress * Math.PI * 2 * tiltFrequency) * tiltZAmplitude;
             return {
-                transform: "translate3d(".concat(horizontalProgress, "px, ").concat(verticalProgress, "vh, ").concat(-zPosition, "px) rotateY(").concat(tiltY, "deg) rotateZ(").concat(tiltZ, "deg)"),
+                transform: "translate3d(".concat(horizontalProgress, "px, calc(-1 * (100vh + 100%) * ").concat(progress, "), ").concat(-zPosition, "px) rotateY(").concat(tiltY, "deg) rotateZ(").concat(tiltZ, "deg)"),
                 opacity: i === 0 ? 0 : 1,
             };
         });
@@ -81,7 +82,7 @@
     function textBalloons(balloons) {
         var container = document.createElement("text-balloons");
         var textBalloonsFilter = document.createElement("text-balloons-filter");
-        textBalloonsFilter.innerHTML = "\n  <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0\" height=\"0\">\n\n  <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feMorphology in=\"SourceGraphic\" operator=\"dilate\" radius=\"3\" result=\"dilated\" />\n\n    <feGaussianBlur in=\"dilated\" stdDeviation=\"1\" result=\"dilated-blur\" />\n\n    <feSpecularLighting in=\"dilated-blur\" surfaceScale=\"10\" specularConstant=\"3.05\" specularExponent=\"20\" lighting-color=\"#ffffff\" result=\"outline-highlight\">\n      <feDistantLight azimuth=\"120\" elevation=\"12\" />\n    </feSpecularLighting>\n\n     <feComposite in2=\"dilated\" in=\"outline-highlight\" operator=\"atop\" result=\"outline-with-light\" />\n    \n\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"42\" specularConstant=\"0.95\" specularExponent=\"60\" lighting-color=\"#ffffff\" result=\"highlight\">\n      <feDistantLight azimuth=\"300\" elevation=\"22\" />\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n    <feComposite in=\"outline-with-light\" in2=\"SourceGraphic\" operator=\"out\"  result=\"outline\"/>\n    <feComposite in2=\"outline\" in=\"swa\" operator=\"over\"  />\n\n  </filter>\n</svg>\n";
+        textBalloonsFilter.innerHTML = "\n  <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0\" height=\"0\">\n\n  <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feMorphology in=\"SourceGraphic\" operator=\"dilate\" radius=\"3\" result=\"dilated\" />\n\n    <feGaussianBlur in=\"dilated\" stdDeviation=\"1\" result=\"dilated-blur\" />\n\n    <feSpecularLighting in=\"dilated-blur\" surfaceScale=\"10\" specularConstant=\"3.05\" specularExponent=\"20\" lighting-color=\"#ffffff\" result=\"outline-highlight\">\n      <feDistantLight azimuth=\"120\" elevation=\"12\" />\n    </feSpecularLighting>\n\n     <feComposite in2=\"dilated\" in=\"outline-highlight\" operator=\"atop\" result=\"outline-with-light\" />\n    \n\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"42\" specularConstant=\"0.95\" specularExponent=\"60\" lighting-color=\"#ffffff\" result=\"highlight\">\n      <feDistantLight azimuth=\"300\" elevation=\"22\" />\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n    <feComposite in=\"outline-with-light\" in2=\"SourceGraphic\" operator=\"out\" result=\"outline\"/>\n    <feComposite in2=\"outline\" in=\"swa\" operator=\"over\"  />\n\n  </filter>\n</svg>\n";
         container.appendChild(textBalloonsFilter);
         var textBalloonsStyle = document.createElement("style");
         textBalloonsStyle.innerHTML = fontDefinition;

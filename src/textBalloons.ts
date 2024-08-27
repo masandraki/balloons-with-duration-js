@@ -61,7 +61,7 @@ function animateBalloon(
       Math.cos(progress * Math.PI * 2 * tiltFrequency) * tiltZAmplitude;
 
     return {
-      transform: `translate3d(${horizontalProgress}px, ${verticalProgress}vh, ${-zPosition}px) rotateY(${tiltY}deg) rotateZ(${tiltZ}deg)`,
+      transform: `translate3d(${horizontalProgress}px, calc(-1 * (100vh + 100%) * ${progress}), ${-zPosition}px) rotateY(${tiltY}deg) rotateZ(${tiltZ}deg)`,
       opacity: i === 0 ? 0 : 1,
     };
   });

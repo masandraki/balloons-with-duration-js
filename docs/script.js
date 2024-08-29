@@ -28,30 +28,38 @@
 
     function createTextBalloon(data) {
         var balloon = document.createElement("text-balloon");
-        balloon.textContent = data.text;
+        // Create a temporary element to measure the text size
+        var measureElement = document.createElement("span");
+        measureElement.style.cssText = "\n    position: absolute;\n    visibility: hidden;\n    font-family: BalloonsJS, system-ui;\n    font-weight: bold;\n    font-size: ".concat(data.fontSize, ";\n    white-space: nowrap;\n  ");
+        measureElement.textContent = data.text;
+        document.body.appendChild(measureElement);
+        // Measure the text size
+        var textWidth = measureElement.offsetWidth;
+        var textHeight = measureElement.offsetHeight;
+        // Remove the temporary element
+        document.body.removeChild(measureElement);
+        // Calculate SVG size with padding
+        var padding = 20; // Adjust this value as needed
+        var svgWidth = textWidth + padding * 2;
+        var svgHeight = textHeight + padding * 2;
+        var svgContent = "\n    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"".concat(svgWidth, "\" height=\"").concat(svgHeight, "\">\n      <defs>\n     <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feMorphology in=\"SourceGraphic\" operator=\"dilate\" radius=\"3\" result=\"dilated\" />\n\n    <feGaussianBlur in=\"dilated\" stdDeviation=\"1\" result=\"dilated-blur\" />\n\n    <feSpecularLighting in=\"dilated-blur\" surfaceScale=\"10\" specularConstant=\"3.05\" specularExponent=\"20\" lighting-color=\"#ffffff\" result=\"outline-highlight\">\n      <feDistantLight azimuth=\"120\" elevation=\"12\" />\n    </feSpecularLighting>\n\n     <feComposite in2=\"dilated\" in=\"outline-highlight\" operator=\"atop\" result=\"outline-with-light\" />\n    \n\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"42\" specularConstant=\"0.95\" specularExponent=\"60\" lighting-color=\"#ffffff\" result=\"highlight\">\n      <feDistantLight azimuth=\"300\" elevation=\"22\" />\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n    <feComposite in=\"outline-with-light\" in2=\"SourceGraphic\" operator=\"out\" result=\"outline\"/>\n    <feComposite in2=\"outline\" in=\"swa\" operator=\"over\"  />\n\n  </filter>\n        <style type=\"text/css\">\n        ").concat(fontDefinition, "\n        </style>\n      </defs>\n      <text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"").concat(data.color, "\" font-size=\"").concat(data.fontSize, "\" font-family=\"BalloonsJS, system-ui\" font-weight=\"bold\" filter=\"url(#balloon)\">").concat(data.text, "</text>\n    </svg>\n  ");
+        // Use encodeURIComponent instead of btoa
+        var encodedSVG = encodeURIComponent(svgContent);
         Object.assign(balloon.style, {
             position: "absolute",
-            color: data.color,
             top: "100%",
             opacity: "0",
+            width: "".concat(svgWidth, "px"),
+            height: "".concat(svgHeight, "px"),
+            backgroundImage: "url(\"data:image/svg+xml,".concat(encodedSVG, "\")"),
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
             fontSize: data.fontSize,
             lineHeight: "1",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            // TODO: avoid clipping emojis
-            // overflow: "hidden",
-            textAlign: "center",
-            transform: "translateZ(0)",
-            filter: "url(#balloon)",
-            backfaceVisibility: "hidden",
-            transformStyle: "preserve-3d",
-            transformOrigin: "center",
-            contain: "style, layout, paint",
-            // To handle empty spaces
+            display: "inline-block",
             minWidth: "1ch",
-            verticalAlign: "middle",
-            // TODO: use radial gradient and background clip: text;. This breaks in Firefox so find a fix
+            // ... (keep other relevant styles) ...
         });
         return balloon;
     }
@@ -81,9 +89,6 @@
     }
     function textBalloons(balloons) {
         var container = document.createElement("text-balloons");
-        var textBalloonsFilter = document.createElement("text-balloons-filter");
-        textBalloonsFilter.innerHTML = "\n  <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"0\" height=\"0\">\n\n  <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feMorphology in=\"SourceGraphic\" operator=\"dilate\" radius=\"3\" result=\"dilated\" />\n\n    <feGaussianBlur in=\"dilated\" stdDeviation=\"1\" result=\"dilated-blur\" />\n\n    <feSpecularLighting in=\"dilated-blur\" surfaceScale=\"10\" specularConstant=\"3.05\" specularExponent=\"20\" lighting-color=\"#ffffff\" result=\"outline-highlight\">\n      <feDistantLight azimuth=\"120\" elevation=\"12\" />\n    </feSpecularLighting>\n\n     <feComposite in2=\"dilated\" in=\"outline-highlight\" operator=\"atop\" result=\"outline-with-light\" />\n    \n\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"42\" specularConstant=\"0.95\" specularExponent=\"60\" lighting-color=\"#ffffff\" result=\"highlight\">\n      <feDistantLight azimuth=\"300\" elevation=\"22\" />\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n    <feComposite in=\"outline-with-light\" in2=\"SourceGraphic\" operator=\"out\" result=\"outline\"/>\n    <feComposite in2=\"outline\" in=\"swa\" operator=\"over\"  />\n\n  </filter>\n</svg>\n";
-        container.appendChild(textBalloonsFilter);
         var textBalloonsStyle = document.createElement("style");
         textBalloonsStyle.innerHTML = fontDefinition;
         container.appendChild(textBalloonsStyle);

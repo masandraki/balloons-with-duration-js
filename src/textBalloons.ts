@@ -51,8 +51,11 @@ function createTextBalloon(data: BalloonData): HTMLElement {
 
     <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
 
-    <feSpecularLighting in="blur" surfaceScale="42" specularConstant="0.95" specularExponent="60" lighting-color="#ffffff" result="highlight">
-      <feDistantLight azimuth="300" elevation="22" />
+    <feSpecularLighting in="blur" surfaceScale="7" specularConstant="1" specularExponent="35" lighting-color="#ffffff" result="highlight">
+      
+      <fePointLight x="200" y="-60" z="250"/>
+      
+
     </feSpecularLighting>
 
     <feComposite in2="SourceGraphic" in="highlight" operator="atop" result="with-light" />

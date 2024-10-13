@@ -11,7 +11,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "serve:docs": "npm run build && npx http-server docs -p 3000"
+    "serve:docs": "npm run dev && npx http-server docs -p 3000"
   },
   "author": "Artur Bień <artur.bien@gmail.com>",
   "license": "MIT",

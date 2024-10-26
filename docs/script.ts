@@ -44,16 +44,16 @@ document.addEventListener("DOMContentLoaded", () => {
         color: "rgba(40, 40, 255, 0.85)",
         fontSize: 162,
       },
-      // {
-      //   text: "LIVE !! $#",
-      //   color: "rgba(0, 200, 0, 0.85)",
-      //   fontSize: 162
-      // },
-      // {
-      //   text: "function() {}",
-      //   color: "rgba(240, 220, 0, 0.85)",
-      //   fontSize: 162
-      // },
+      {
+        text: "LIVE !! $#",
+        color: "rgba(0, 200, 0, 0.85)",
+        fontSize: 162,
+      },
+      {
+        text: "function() {}",
+        color: "rgba(240, 220, 0, 0.85)",
+        fontSize: 162,
+      },
     ]);
   });
 });

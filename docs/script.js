@@ -30,7 +30,7 @@
         var balloon = document.createElement("text-balloon");
         // Create a temporary element to measure the text size
         var measureElement = document.createElement("span");
-        measureElement.style.cssText = "\n    position: absolute;\n    visibility: hidden;\n    font-family: BalloonsJS, system-ui;\n    font-weight: bold;\n    font-size: ".concat(data.fontSize, ";\n    white-space: nowrap;\n  ");
+        measureElement.style.cssText = "\n    position: absolute;\n    visibility: hidden;\n    font-family: BalloonsJS, system-ui;\n    font-weight: bold;\n    font-size: ".concat(data.fontSize, "px;\n    white-space: nowrap;\n  ");
         measureElement.textContent = data.text;
         document.body.appendChild(measureElement);
         // Measure the text size
@@ -40,9 +40,9 @@
         document.body.removeChild(measureElement);
         // Calculate SVG size with padding
         var padding = 20; // Adjust this value as needed
-        var svgWidth = textWidth + padding * 2;
-        var svgHeight = textHeight + padding * 2;
-        var svgContent = "\n    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"".concat(svgWidth, "\" height=\"").concat(svgHeight, "\">\n      <defs>\n     <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feMorphology in=\"SourceGraphic\" operator=\"dilate\" radius=\"3\" result=\"dilated\" />\n\n    <feGaussianBlur in=\"dilated\" stdDeviation=\"1\" result=\"dilated-blur\" />\n\n    <feSpecularLighting in=\"dilated-blur\" surfaceScale=\"10\" specularConstant=\"3.05\" specularExponent=\"20\" lighting-color=\"#ffffff\" result=\"outline-highlight\">\n      <feDistantLight azimuth=\"120\" elevation=\"12\" />\n    </feSpecularLighting>\n\n     <feComposite in2=\"dilated\" in=\"outline-highlight\" operator=\"atop\" result=\"outline-with-light\" />\n    \n\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"7\" specularConstant=\"1\" specularExponent=\"35\" lighting-color=\"#ffffff\" result=\"highlight\">\n      \n      <fePointLight x=\"200\" y=\"-60\" z=\"250\"/>\n      \n\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n    <feComposite in=\"outline-with-light\" in2=\"SourceGraphic\" operator=\"out\" result=\"outline\"/>\n    <feComposite in2=\"outline\" in=\"swa\" operator=\"over\"  />\n\n  </filter>\n        <style type=\"text/css\">\n        ").concat(fontDefinition, "\n        </style>\n      </defs>\n      <text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"").concat(data.color, "\" font-size=\"").concat(data.fontSize, "\" font-family=\"BalloonsJS, system-ui\" font-weight=\"bold\" filter=\"url(#balloon)\">").concat(data.text, "</text>\n    </svg>\n  ");
+        var svgWidth = textWidth + padding * 1;
+        var svgHeight = textHeight + padding * 1;
+        var svgContent = "\n    <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"".concat(svgWidth, "\" height=\"").concat(svgHeight, "\">\n      <defs>\n     <filter id=\"balloon\" color-interpolation-filters=\"sRGB\">\n    <feMorphology in=\"SourceGraphic\" operator=\"dilate\" radius=\"3\" result=\"dilated\" />\n\n    <feGaussianBlur in=\"dilated\" stdDeviation=\"1\" result=\"dilated-blur\" />\n\n    <feSpecularLighting in=\"dilated-blur\" surfaceScale=\"10\" specularConstant=\"3.05\" specularExponent=\"20\" lighting-color=\"#ffffff\" result=\"outline-highlight\">\n      <feDistantLight azimuth=\"120\" elevation=\"12\" />\n    </feSpecularLighting>\n\n     <feComposite in2=\"dilated\" in=\"outline-highlight\" operator=\"atop\" result=\"outline-with-light\" />\n    \n\n    <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"6\" result=\"blur\" />\n\n    <feSpecularLighting in=\"blur\" surfaceScale=\"7\" specularConstant=\"1\" specularExponent=\"35\" lighting-color=\"#ffffff\" result=\"highlight\">\n      \n      <fePointLight x=\"200\" y=\"-60\" z=\"250\"/>\n      \n\n    </feSpecularLighting>\n\n    <feComposite in2=\"SourceGraphic\" in=\"highlight\" operator=\"atop\" result=\"with-light\" />\n\n    <feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"1 0 0 0 0\n              0 1 0 0 0\n              0 0 1 0 0\n              0 0 0 100 0\" result=\"black\" />\n    <feOffset in=\"black\" dx=\"-6\" dy=\"6\" result=\"offset\" />\n\n    <feComposite in2=\"black\" in=\"offset\" operator=\"out\" result=\"clipped\" />\n    <feGaussianBlur in=\"clipped\" stdDeviation=\"6\" result=\"clipped-blur\" />\n    <feOffset in=\"clipped-blur\" dx=\"6\" dy=\"-6\" result=\"offset-shadow\" />\n    <feComposite in=\"offset-shadow\" in2=\"with-light\" operator=\"atop\" result=\"swa\" />\n\n    <feComposite in=\"outline-with-light\" in2=\"SourceGraphic\" operator=\"out\" result=\"outline\"/>\n    <feComposite in2=\"outline\" in=\"swa\" operator=\"over\"  />\n\n  </filter>\n        <style type=\"text/css\">\n        ").concat(fontDefinition, "\n        </style>\n      </defs>\n      <text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"").concat(data.color, "\" font-size=\"").concat(data.fontSize, "px\" font-family=\"BalloonsJS, system-ui\" font-weight=\"bold\" filter=\"url(#balloon)\">").concat(data.text, "</text>\n    </svg>\n  ");
         // Use encodeURIComponent instead of btoa
         var encodedSVG = encodeURIComponent(svgContent);
         Object.assign(balloon.style, {
@@ -151,28 +151,28 @@
             {
                 text: "BALLOONS",
                 color: "rgba(255, 0, 0, 0.95)",
-                fontSize: "162px",
+                fontSize: 162,
             },
             {
                 text: "ARE JUST",
                 //   color: "rgba(40, 40, 255, 0.95)",
                 color: "rgba(240, 220, 0, 0.95)",
-                fontSize: "162px",
+                fontSize: 162,
             },
             {
                 text: "SO CUTE",
                 color: "rgba(0, 200, 0, 0.95)",
-                fontSize: "162px",
+                fontSize: 162,
             },
             {
                 text: "👻 💩 🤙",
                 color: "black",
-                fontSize: "182px",
+                fontSize: 182,
             },
             // {
             //   text: "function() {}",
             //   color: "rgba(240, 220, 0, 0.95)",
-            //   fontSize: "162px",
+            //   fontSize: 162
             // },
         ]);
         var button = document.getElementById("releastBalloonsButton");
@@ -181,22 +181,22 @@
                 {
                     text: "🏝️💩🤡🤩",
                     color: "rgba(255, 0, 0, 1)",
-                    fontSize: "162px",
+                    fontSize: 162,
                 },
                 {
                     text: "ARE NOW",
                     color: "rgba(40, 40, 255, 0.85)",
-                    fontSize: "162px",
+                    fontSize: 162,
                 },
                 // {
                 //   text: "LIVE !! $#",
                 //   color: "rgba(0, 200, 0, 0.85)",
-                //   fontSize: "162px",
+                //   fontSize: 162
                 // },
                 // {
                 //   text: "function() {}",
                 //   color: "rgba(240, 220, 0, 0.85)",
-                //   fontSize: "162px",
+                //   fontSize: 162
                 // },
             ]);
         });

@@ -3,7 +3,7 @@ import { fontDefinition } from "./balloonFont";
 interface BalloonData {
   text: string;
   color: string;
-  fontSize: string;
+  fontSize: number;
 }
 
 function createTextBalloon(data: BalloonData): HTMLElement {
@@ -16,7 +16,7 @@ function createTextBalloon(data: BalloonData): HTMLElement {
     visibility: hidden;
     font-family: BalloonsJS, system-ui;
     font-weight: bold;
-    font-size: ${data.fontSize};
+    font-size: ${data.fontSize}px;
     white-space: nowrap;
   `;
   measureElement.textContent = data.text;
@@ -31,8 +31,8 @@ function createTextBalloon(data: BalloonData): HTMLElement {
 
   // Calculate SVG size with padding
   const padding = 20; // Adjust this value as needed
-  const svgWidth = textWidth + padding * 2;
-  const svgHeight = textHeight + padding * 2;
+  const svgWidth = textWidth + padding * 1;
+  const svgHeight = textHeight + padding * 1;
 
   const svgContent = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}">
@@ -79,7 +79,7 @@ function createTextBalloon(data: BalloonData): HTMLElement {
         ${fontDefinition}
         </style>
       </defs>
-      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="${data.color}" font-size="${data.fontSize}" font-family="BalloonsJS, system-ui" font-weight="bold" filter="url(#balloon)">${data.text}</text>
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="${data.color}" font-size="${data.fontSize}px" font-family="BalloonsJS, system-ui" font-weight="bold" filter="url(#balloon)">${data.text}</text>
     </svg>
   `;
 

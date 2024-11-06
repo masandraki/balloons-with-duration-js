@@ -132,9 +132,9 @@ function animateBalloon(
   zPosition: number,
   delay: number
 ) {
-  const duration = 10000 + Math.random() * 5000;
-  const tiltYAmplitude = (Math.random() - 0.5) * 18; // Random tilt amplitude between -10 and 10 degrees
-  const tiltZAmplitude = (Math.random() - 0.5) * 20; // Random tilt amplitude between -20 and 20 degrees
+  const duration = 5000 + Math.random() * 1500;
+  const tiltYAmplitude = (Math.random() - 0.5) * 14; // Random tilt amplitude between -10 and 10 degrees
+  const tiltZAmplitude = (Math.random() - 0.5) * 16; // Random tilt amplitude between -20 and 20 degrees
   const tiltFrequency = 1 + Math.random(); // Random frequency between 1 and 2
   const targetX = (Math.random() - 0.5) * 100; // Random target X position between -50 and 50
 
@@ -191,7 +191,7 @@ export function textBalloons(balloons: BalloonData[]): void {
 
   document.body.appendChild(container);
 
-  const lineDelay = 3000; // Delay between lines in milliseconds
+  const lineDelay = 1000; // Delay between lines in milliseconds
   const charDelay = 100; // Delay between characters in milliseconds
   const charSpacing = 0.2; // Additional spacing between characters in ch units
   const totalLines = balloons.length;

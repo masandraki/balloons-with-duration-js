@@ -1,6 +1,6 @@
 {
   "name": "balloons-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Animated balloons effect for your website",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

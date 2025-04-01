@@ -1,58 +1,53 @@
-import { balloons, textBalloons } from "../src/index";
-
+import { balloons } from "../src/index";
+import { textBalloons } from "../src/textBalloons";
 document.addEventListener("DOMContentLoaded", () => {
   balloons();
-  // const screenWidth = Math.min(window.innerWidth, 600);
-  // const scaleFactor = screenWidth / 390;
-
-  // textBalloons([
-  //   {
-  //     text: "27%",
-  //     color: "rgba(255, 0, 0, 0.95)",
-  //     fontSize: 130 * scaleFactor,
-  //   },
-  //   {
-  //     text: "💸 🤑 💲 💰 💵",
-
-  //     //   color: "rgba(40, 40, 255, 0.95)",
-  //     // color: "rgba(240, 220, 0, 0.95)",
-  //     color: "black",
-  //     fontSize: 110 * scaleFactor,
-  //   },
-  //   {
-  //     text: "ART",
-  //     color: "rgba(40, 40, 255, 0.90)",
-  //     fontSize: 122 * scaleFactor,
-  //   },
-  //   {
-  //     text: "🤙🐻",
-  //     color: "black",
-  //     fontSize: 122 * scaleFactor,
-  //   },
-  // ]);
-  const button = document.getElementById("releastBalloonsButton");
+  const button = document.getElementById("releaseBalloonsButton");
 
   button?.addEventListener("click", () => {
     balloons();
-    // const screenWidth = Math.min(window.innerWidth, 600);
-    // const scaleFactor = screenWidth / 390;
-
-    // textBalloons([
-    //   {
-    //     text: "TEXT",
-    //     color: "rgba(40, 40, 255, 0.85)",
-    //     fontSize: 112 * scaleFactor,
-    //   },
-    //   {
-    //     text: "WORKS",
-    //     color: "rgba(0, 200, 0, 0.85)",
-    //     fontSize: 82 * scaleFactor,
-    //   },
-    //   {
-    //     text: "TOO",
-    //     color: "rgba(240, 220, 0, 0.95)",
-    //     fontSize: 112 * scaleFactor,
-    //   },
-    // ]);
   });
+
+  const textButton = document.getElementById("releaseTextBalloonsButton");
+
+  function releaseTextBalloons() {
+    const colors = [
+      // lemon
+      "#DBF505EE",
+      // blue
+      "#1754D8EE",
+      // orange
+      "#FA4616EE",
+      // lime
+      "#06D718EE",
+      // magenta,
+      "#FF008DEE",
+    ];
+    // Pick first color randomly
+    const firstColorIndex = Math.floor(Math.random() * colors.length);
+    // Pick second color by selecting from remaining colors
+    const remainingColors = colors.filter(
+      (_, index) => index !== firstColorIndex
+    );
+    const secondColorIndex = Math.floor(Math.random() * remainingColors.length);
+
+    textBalloons([
+      {
+        color: colors[firstColorIndex],
+        fontSize: Math.min(window.innerWidth / 5, 160), // Scale linearly with screen width up to 90px
+        text: `HAPPY`,
+      },
+      {
+        color: remainingColors[secondColorIndex],
+        fontSize: Math.min(window.innerWidth / 4, 160), // Scale linearly with screen width up to 120px
+        text: `BDAY`,
+      },
+      {
+        text: "💩🔥😈",
+        fontSize: Math.min(window.innerWidth / 4, 160), // Scale linearly with screen width up to 120px
+        color: "#000000",
+      },
+    ]);
+  }
+  textButton?.addEventListener("click", releaseTextBalloons);
 });

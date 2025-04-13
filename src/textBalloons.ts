@@ -130,9 +130,9 @@ function createTextBalloon(data: BalloonData): HTMLElement {
 function animateBalloon(
   balloon: HTMLElement,
   zPosition: number,
-  delay: number
+  delay: number,
+  durationMs: number
 ) {
-  const duration = 5000 + Math.random() * 1500;
   const tiltYAmplitude = (Math.random() - 0.5) * 14; // Random tilt amplitude between -10 and 10 degrees
   const tiltZAmplitude = (Math.random() - 0.5) * 16; // Random tilt amplitude between -20 and 20 degrees
   const tiltFrequency = 1 + Math.random(); // Random frequency between 1 and 2
@@ -154,7 +154,7 @@ function animateBalloon(
   });
 
   const animation = balloon.animate(keyframes, {
-    duration,
+    duration: durationMs,
     delay,
     easing: "linear",
     fill: "forwards",
@@ -163,7 +163,7 @@ function animateBalloon(
   animation.onfinish = () => balloon.remove();
 }
 
-export function textBalloons(balloons: BalloonData[]): void {
+export function textBalloons(balloons: BalloonData[], animationDuration = 4000): void {
   const container = document.createElement("text-balloons");
 
   const textBalloonsStyle = document.createElement("style");
@@ -242,7 +242,8 @@ export function textBalloons(balloons: BalloonData[]): void {
       animateBalloon(
         balloon,
         zPosition,
-        lineIndex * lineDelay + charIndex * charDelay
+        lineIndex * lineDelay + charIndex * charDelay,
+        animationDuration
       );
 
       currentX += charWidthPercent + charSpacing;
